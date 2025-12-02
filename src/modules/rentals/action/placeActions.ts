@@ -4,7 +4,7 @@ import { Place } from '../types';
 // Obtener todos los places
 export const fetchPlaces = async (): Promise<Place[]> => {
   try {
-    const response = await api.get('/places');
+    const response = await api.get('/api/Places');
     
     let rawPlaces = [];
     
@@ -41,7 +41,7 @@ export const fetchPlaces = async (): Promise<Place[]> => {
 export const fetchPlacesByLocation = async (locationId: string): Promise<Place[]> => {
   try {
     // Obtener TODOS los places del backend
-    const response = await api.get('/places');
+    const response = await api.get('/api/Places');
     
     let rawPlaces = [];
     
@@ -97,7 +97,7 @@ export const createPlace = async (placeData: {
       location_id: placeData.location_id,
     };
 
-    const response = await api.post('/places', backendPayload);
+    const response = await api.post('/api/Places', backendPayload);
     
     // Manejar diferentes estructuras de respuesta
     if (response.data && response.data.data) {
@@ -113,7 +113,7 @@ export const createPlace = async (placeData: {
 // Actualizar un place
 export const updatePlace = async (id: string, placeData: Partial<Place>): Promise<Place> => {
   try {
-    const response = await api.put(`/places/${id}`, placeData);
+    const response = await api.put(`/api/Places/${id}`, placeData);
     
     if (response.data && response.data.data) {
       return response.data.data;
@@ -128,7 +128,7 @@ export const updatePlace = async (id: string, placeData: Partial<Place>): Promis
 // Eliminar un place
 export const deletePlace = async (id: string): Promise<void> => {
   try {
-    await api.delete(`/places/${id}`);
+    await api.delete(`/api/Places/${id}`);
   } catch (error) {
     console.error('❌ Error deleting place:', error);
     throw error;

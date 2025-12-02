@@ -3,7 +3,7 @@ import { Location } from '../types/location';
 
 export const fetchLocations = async (): Promise<Location[]> => {
   try {
-    const response = await api.get('/locations');
+    const response = await api.get('/api/Locations');
     
     // Manejar diferentes estructuras de respuesta de la API
     let locations: Location[] = [];
@@ -40,20 +40,20 @@ export const fetchLocations = async (): Promise<Location[]> => {
 };
 
 export const getLocation = async (id: string): Promise<Location> => {
-  const response = await api.get<Location>(`/locations/${id}`);
+  const response = await api.get<Location>(`/api/Locations/${id}`);
   return response.data;
 };
 
 export const createLocation = async (payload: Omit<Location, 'id'>): Promise<Location> => {
-  const response = await api.post<Location>('/locations', payload);
+  const response = await api.post<Location>('/api/Locations', payload);
   return response.data;
 };
 
 export const updateLocation = async (id: string, payload: Partial<Location>): Promise<Location> => {
-  const response = await api.put<Location>(`/locations/${id}`, payload);
+  const response = await api.put<Location>(`/api/Locations/${id}`, payload);
   return response.data;
 };
 
 export const deleteLocation = async (id: string): Promise<void> => {
-  await api.delete(`/locations/${id}`);
+  await api.delete(`/api/Locations/${id}`);
 };

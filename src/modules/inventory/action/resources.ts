@@ -6,12 +6,12 @@ import {
 } from "../types/resource";
 
 export const fetchResources = async (): Promise<Resource[]> => {
-  const response = await api.get<Resource[]>("/resource");
+  const response = await api.get<Resource[]>("/api/Resource");
   return response.data;
 };
 
 export const getResource = async (id: string): Promise<Resource> => {
-  const response = await api.get<Resource>(`/resource/${id}`);
+  const response = await api.get<Resource>(`/api/Resource/${id}`);
   return response.data;
 };
 
@@ -22,7 +22,7 @@ export const createResource = async (payload: CreateResourcePayload) => {
     observation: payload.observation ?? null, // 🔑 undefined -> null
   };
 
-  const res = await api.post("/resource", body, {
+  const res = await api.post("/api/Resource", body, {
     headers: { "Content-Type": "application/json" },
   });
 
@@ -34,10 +34,10 @@ export const updateResource = async (
   id: string,
   payload: UpdateResourcePayload
 ): Promise<Resource> => {
-  const response = await api.patch<Resource>(`/resource/${id}`, payload);
+  const response = await api.put<Resource>(`/api/Resource/${id}`, payload);
   return response.data;
 };
 
 export const deleteResource = async (id: string): Promise<void> => {
-  await api.delete(`/resource/${id}`);
+  await api.delete(`/api/Resource/${id}`);
 };

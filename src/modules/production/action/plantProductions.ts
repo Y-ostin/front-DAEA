@@ -2,20 +2,20 @@ import api from '@/core/config/client';
 import { CreatePlantPayload, Plant, UpdatePlantPayload } from '../types/plantProductions';
 
 export const fetchPlants = async (): Promise<Plant[]> => {
-  const response = await api.get<Plant[]>('/plantProduction');
+  const response = await api.get<Plant[]>('/api/PlantProduction');
   return response.data;
 };
 
 export const createPlant = async (payload: CreatePlantPayload): Promise<Plant> => {
-  const response = await api.post<Plant>('/plantProduction', payload);
+  const response = await api.post<Plant>('/api/PlantProduction', payload);
   return response.data;
 };
 
 export const updatePlant = async (id: string, payload: UpdatePlantPayload): Promise<Plant> => {
-  const response = await api.patch<Plant>(`/plantProduction/${id}`, payload);
+  const response = await api.put<Plant>(`/api/PlantProduction/${id}`, payload);
   return response.data;
 };
 
 export const deletePlant = async (id: string): Promise<void> => {
-  await api.put(`/plantProduction/${id}`);
+  await api.put(`/api/PlantProduction/${id}`);
 };

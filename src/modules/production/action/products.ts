@@ -3,7 +3,7 @@ import { CreateProductPayload, Product, UpdateProductPayload } from '../types/pr
 
 // SIN CAMBIOS
 export const fetchProducts = async (): Promise<Product[]> => {
-  const response = await api.get<Product[]>('/products');
+  const response = await api.get<Product[]>('/api/Products');
   return response.data;
 };
 
@@ -15,7 +15,7 @@ export const createProduct = async (
   // Ya no se construye un FormData aquí.
   // La función simplemente reenvía el payload que recibe (que ya puede ser un FormData).
   // Y recuerda, NUNCA se debe establecer la cabecera 'Content-Type' manualmente para FormData.
-  const response = await api.post<Product>('/products', payload);
+  const response = await api.post<Product>('/api/Products', payload);
   return response.data;
 };
 
@@ -26,11 +26,11 @@ export const updateProduct = async (
   id: string, 
   payload: UpdateProductPayload | FormData // <-- Actualizado también
 ): Promise<Product> => {
-  const response = await api.patch<Product>(`/products/${id}`, payload);
+  const response = await api.put<Product>(`/api/Products/${id}`, payload);
   return response.data;
 };
 
 // SIN CAMBIOS
 export const deleteProduct = async (id: string): Promise<void> => {
-  await api.delete(`/products/${id}`);
+  await api.delete(`/api/Products/${id}`);
 };

@@ -20,14 +20,14 @@ export const fetchWarehouseMovementResources = async (
   // Filtros en formato horizontal optimizado
   Object.entries(filters).forEach(([key, value]) => value && params.append(key, value));
 
-  const res = await api.get('/warehouseMovementResource', { params });
+  const res = await api.get('/api/WarehouseMovementResource', { params });
   return res.data;
 };
 
 export const createWarehouseMovementResource = async (
   payload: CreateWarehouseMovementResourcePayload
 ): Promise<WarehouseMovementResource> => {
-  const res = await api.post('/warehouseMovementResource', payload);
+  const res = await api.post('/api/WarehouseMovementResource', payload);
   return res.data;
 };
 
@@ -35,10 +35,10 @@ export const updateWarehouseMovementResource = async (
   id: string,
   payload: UpdateWarehouseMovementResourcePayload
 ): Promise<WarehouseMovementResource> => {
-  const res = await api.patch(`/warehouseMovementResource/${id}`, payload);
+  const res = await api.put(`/api/WarehouseMovementResource/${id}`, payload);
   return res.data;
 };
 
 export const deleteWarehouseMovementResource = async (id: string): Promise<void> => {
-  await api.put(`/warehouseMovementResource/${id}`, {}); // ← agrega un objeto vacío
+  await api.put(`/api/WarehouseMovementResource/${id}`, {}); // ← agrega un objeto vacío
 };
