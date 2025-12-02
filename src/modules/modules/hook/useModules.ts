@@ -7,8 +7,10 @@ export const useFetchModules = () => {
   const { userWithPermissions } = useAuthStore();
   
   // 🔥 VERIFICAR PERMISOS ANTES DE HACER LA PETICIÓN
-  // Buscar si el usuario tiene al menos un permiso de lectura en algún módulo
-  const userHasAnyReadPermission = userWithPermissions?.Role?.Permissions?.some(
+  // Soportar tanto camelCase (role.permissions) como PascalCase (Role.Permissions)
+  const permissions = userWithPermissions?.role?.permissions || userWithPermissions?.Role?.Permissions;
+  
+  const userHasAnyReadPermission = permissions?.some(
     permission => permission.canRead === true
   ) ?? false;
 
