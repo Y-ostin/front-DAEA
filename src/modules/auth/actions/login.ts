@@ -5,7 +5,7 @@ import { LoginCredentials, LoginResponse } from '../types/loginactionside';
 
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
-    const response = await api.post<LoginResponse>('/auth/login', credentials);
+    const response = await api.post<LoginResponse>('/Auth/login', credentials);
 
     const { token } = response.data;
     
