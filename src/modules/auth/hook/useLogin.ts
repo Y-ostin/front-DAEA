@@ -27,6 +27,21 @@ export const useAdminLogin = () => {
           phonenumber?: string; 
         };
         
+        // Normalizar los datos del usuario para manejar ambos formatos (Role vs role)
+        const normalizedUser: UserWithPermissions = {
+          ...data.user,
+          // Soportar tanto 'role' como 'Role'
+          role: data.user.role || data.user.Role ? {
+            id: data.user.role?.id || data.user.Role?.id || '',
+            name: data.user.role?.name || data.user.Role?.name || '',
+            description: data.user.role?.description || data.user.Role?.description || '',
+            status: data.user.role?.status || data.user.Role?.status || true,
+            permissions: data.user.role?.permissions || data.user.Role?.Permissions || [],
+            createdAt: data.user.role?.createdAt || data.user.Role?.createdAt,
+            updatedAt: data.user.role?.updatedAt || data.user.Role?.updatedAt,
+          } : undefined,
+        };
+        
         const userToSave: User = {
           id: data.user.id,
           name: data.user.name,
@@ -40,12 +55,12 @@ export const useAdminLogin = () => {
         
         // 🔥 PASO 3: Guardar en el store
         setUser(userToSave);
-        setUserWithPermissions(data.user);
+        setUserWithPermissions(normalizedUser);
         
         console.log('🎉 ¡LOGIN COMPLETO!', {
-          name: data.user.name,
-          role: data.user.role?.name,
-          permissions: data.user.role?.permissions?.length || 0
+          name: normalizedUser.name,
+          role: normalizedUser.role?.name,
+          permissions: normalizedUser.role?.permissions?.length || 0
         });
         
       } catch (error) {

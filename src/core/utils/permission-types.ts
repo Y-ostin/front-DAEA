@@ -1,4 +1,4 @@
-// 🔥 TIPOS BASADOS EN TU BACKEND REAL
+// 🔥 TIPOS BASADOS EN TU BACKEND .NET
 
 /**
  * Usuario con información completa de permisos
@@ -7,15 +7,32 @@
 export interface UserWithPermissions {
   id: string;
   name: string;
+  dni?: string;
+  phonenumber?: string;
   email: string;
   roleId: string;
+  roleName?: string;
   status: boolean; // Usuario activo/inactivo
-  Role?: {
+  createdAt?: string;
+  updatedAt?: string;
+  role?: {
     id: string;
     name: string; // Ej: "Admin", "Operador"
     description: string;
     status: boolean; // Rol activo/inactivo
-    Permissions: Permission[]; // Array de permisos por módulo
+    permissions: Permission[]; // Array de permisos por módulo
+    createdAt?: string;
+    updatedAt?: string;
+  };
+  // Soporte para ambos formatos (mayúscula y minúscula)
+  Role?: {
+    id: string;
+    name: string;
+    description: string;
+    status: boolean;
+    Permissions: Permission[];
+    createdAt?: string;
+    updatedAt?: string;
   };
 }
 
@@ -26,6 +43,7 @@ export interface UserWithPermissions {
 export interface Permission {
   id: string;
   moduleId: string; // ID del módulo al que aplica
+  moduleName?: string; // Nombre del módulo
   canRead: boolean;   // Ver/Leer datos
   canWrite: boolean;  // Crear nuevos registros
   canEdit: boolean;   // Modificar registros existentes
