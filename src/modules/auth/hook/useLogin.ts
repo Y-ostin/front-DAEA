@@ -20,86 +20,36 @@ export const useAdminLogin = () => {
         console.log('✅ Token guardado en localStorage');
       }
       
+      // 🔥 PASO 2: Usar los datos del login directamente
       try {
-        // 🔥 PASO 2: OBTENER DATOS FRESCOS DIRECTAMENTE (sin React Query para evitar conflictos)
-        console.log('🔄 Obteniendo permisos frescos después del login...');
+        const extendedUserData = data.user as UserWithPermissions & { 
+          dni?: string; 
+          phonenumber?: string; 
+        };
         
-        const response = await fetch(`${process.env.NEXT_PUBLIC_GATEWAY_URL || 'http://localhost:3005'}/auth/me`, {
-          headers: {
-            'Authorization': `Bearer ${data.token}`,
-            'Content-Type': 'application/json'
-          }
+        const userToSave: User = {
+          id: data.user.id,
+          name: data.user.name,
+          email: data.user.email,
+          roleId: data.user.roleId,
+          dni: extendedUserData.dni || '',
+          phonenumber: extendedUserData.phonenumber || '',
+          password: '',
+          status: data.user.status
+        };
+        
+        // 🔥 PASO 3: Guardar en el store
+        setUser(userToSave);
+        setUserWithPermissions(data.user);
+        
+        console.log('🎉 ¡LOGIN COMPLETO!', {
+          name: data.user.name,
+          role: data.user.role?.name,
+          permissions: data.user.role?.permissions?.length || 0
         });
         
-        if (response.ok) {
-          const result = await response.json();
-          const freshUserData = result.data;
-          
-          console.log('✅ Datos frescos obtenidos:', {
-            name: freshUserData.name,
-            role: freshUserData.Role?.name,
-            totalPermissions: freshUserData.Role?.Permissions?.length || 0
-          });
-          
-          // 🔥 PASO 3: Crear usuario básico para compatibilidad
-          const extendedUserData = freshUserData as UserWithPermissions & { 
-            dni?: string; 
-            phonenumber?: string; 
-          };
-          
-          const userToSave: User = {
-            id: freshUserData.id,
-            name: freshUserData.name,
-            email: freshUserData.email,
-            roleId: freshUserData.roleId,
-            dni: extendedUserData.dni || '',
-            phonenumber: extendedUserData.phonenumber || '',
-            password: '',
-            status: freshUserData.status
-          };
-          
-          // 🔥 PASO 4: Guardar en el store
-          setUser(userToSave);
-          setUserWithPermissions(freshUserData);
-          
-          console.log('🎉 ¡LOGIN COMPLETO CON PERMISOS SINCRONIZADOS!');
-          return;
-        }
-        
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        
       } catch (error) {
-        console.error('❌ Error obteniendo datos frescos, usando datos del login como fallback:', error);
-        
-        // 🔥 FALLBACK: usar los datos del login como respaldo
-        let userToSave: User;
-        let userWithPermissionsToSave: UserWithPermissions;
-        
-        if (typeof data.user === 'string') {
-          console.log('⚠️ Usuario viene como string, creando objeto básico');
-          userToSave = {
-            id: 'temp-id',
-            name: data.user,
-            email: '',
-            roleId: ''
-          } as User;
-          
-          userWithPermissionsToSave = {
-            id: 'temp-id',
-            name: data.user,
-            email: '',
-            roleId: '',
-            status: true
-          } as UserWithPermissions;
-        } else {
-          userToSave = data.user as User;
-          userWithPermissionsToSave = data.user;
-        }
-        
-        setUser(userToSave);
-        setUserWithPermissions(userWithPermissionsToSave);
-        
-        console.log('⚠️ Login completado con datos de fallback');
+        console.error('❌ Error procesando datos del login:', error);
       }
     },
   });
