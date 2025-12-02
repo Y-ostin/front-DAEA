@@ -4,7 +4,7 @@ import api from '@/core/config/client';
 // Obtener todas las tiendas
 export const fetchStores = async (page: number = 1, limit: number = 10): Promise<StoreResponse> => {
   try {
-    const response = await api.get('/store', {
+    const response = await api.get('/api/store', {
       params: { page, limit }
     });
     
@@ -51,14 +51,13 @@ export const createStore = async (data: CreateStoreRequest): Promise<StoreAttrib
 // Actualizar una tienda existente
 export const updateStore = async (data: UpdateStoreRequest): Promise<StoreAttributes> => {
   const { id, ...updateData } = data;
-  const response = await api.patch(`/store/${id}`, updateData);
+  const response = await api.put(`/api/store/${id}`, updateData);
   return response.data;
 };
 
 // Eliminar una tienda
 export const deleteStore = async (id: string): Promise<void> => {
-
-  await api.delete(`/store/${id}`);
+  await api.delete(`/api/store/${id}`);
 };
 
 // Buscar tiendas por nombre
