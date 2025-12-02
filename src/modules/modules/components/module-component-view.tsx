@@ -6,12 +6,11 @@ import ModuleModal from './modal-update-module';
 import { Module } from '@/modules/modules/types/modules';
 import { useQueryClient } from '@tanstack/react-query';
 
-// 🔥 IMPORTAR SISTEMA DE PERMISOS Y HOOK DE USUARIO ACTUAL
+// 🔥 IMPORTAR SISTEMA DE PERMISOS
 import { 
   AccessDeniedModal,
 } from '@/core/utils';
 import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
-import { useCurrentUser } from '@/modules/auth/hook/useCurrentUser';
 import { useAuthStore } from '@/core/store/auth';
 import { suppressAxios403Errors } from '@/core/utils/error-suppressor';
 
@@ -30,9 +29,8 @@ const ModuleList: React.FC = () => {
   const [selectedModule, setSelectedModule] = useState<Module | null>(null);
   const queryClient = useQueryClient(); // 🔥 AGREGAR QUERY CLIENT
   
-  // 🔥 OBTENER USUARIO ACTUAL CON SUS PERMISOS DESDE /auth/me
-  const { user } = useAuthStore();
-  const { data: currentUserWithPermissions, isLoading: usersLoading } = useCurrentUser();
+  // 🔥 OBTENER USUARIO Y PERMISOS DESDE ZUSTAND STORE (NO DESDE /auth/me)
+  const { user, userWithPermissions } = useAuthStore();
   
   // 🔥 VERIFICAR ERROR 403 INMEDIATAMENTE - SIN USAR PERMISOS DINÁMICOS SI HAY ERROR
   const is403Error = error && (error.message.includes('403') || error.message.includes('Forbidden'));
@@ -48,7 +46,7 @@ const ModuleList: React.FC = () => {
   const { hasPermission: canDelete } = useModulePermission(MODULE_NAMES.MODULES, 'canDelete');
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isAdmin = (currentUserWithPermissions as any)?.Role?.name === 'Admin';
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin';
   
   const [showAccessDenied, setShowAccessDenied] = useState(false);
   const [accessDeniedAction, setAccessDeniedAction] = useState('');
@@ -61,12 +59,11 @@ const ModuleList: React.FC = () => {
   // 🔥 DEBUG: Ver permisos actuales
   console.log('🔍 ModuleList - Análisis de Permisos:', {
     userId: user?.id,
-    userFound: !!currentUserWithPermissions,
+    userFound: !!userWithPermissions,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    roleName: (currentUserWithPermissions as any)?.Role?.name,
+    roleName: (userWithPermissions as any)?.role?.name,
     moduleName: MODULE_NAMES.MODULES,
     permisos: { canView, canEdit, canCreate, canDelete, isAdmin },
-    usersLoading,
     permissionsLoading
   });
 
@@ -124,7 +121,7 @@ const ModuleList: React.FC = () => {
     }
   };
 
-  if (isLoading || usersLoading) return <div className="text-center text-red-800 font-semibold">Cargando módulos y permisos...</div>;
+  if (isLoading) return <div className="text-center text-red-800 font-semibold">Cargando módulos...</div>;
   
   // 🔥 VERIFICAR ERROR 403 INMEDIATAMENTE - NO ESPERAR A PERMISOS
   if (is403Error) {
@@ -183,9 +180,9 @@ const ModuleList: React.FC = () => {
           <p className="text-sm text-blue-800">
             <strong>Debug Permisos:</strong> 
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            Usuario: {(currentUserWithPermissions as any)?.name || 'No encontrado'} | 
+            Usuario: {(userWithPermissions as any)?.name || 'No encontrado'} | 
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            Rol: {(currentUserWithPermissions as any)?.Role?.name || 'Sin rol'} | 
+            Rol: {(userWithPermissions as any)?.role?.name || 'Sin rol'} | 
             Ver: {canView ? '✅' : '❌'} | 
             Editar: {canEdit ? '✅' : '❌'} | 
             Crear: {canCreate ? '✅' : '❌'} | 
