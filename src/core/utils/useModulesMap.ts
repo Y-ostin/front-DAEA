@@ -19,12 +19,13 @@ export const useModulesMap = () => {
   // 🔥 VERIFICAR SI EL USUARIO TIENE ACCESO BÁSICO A MÓDULOS
   const hasModuleAccess = useMemo(() => {
     // Si no hay usuario, no hay acceso
-    if (!userWithPermissions?.Role?.Permissions) {
+    const permissions = userWithPermissions?.role?.permissions || userWithPermissions?.Role?.Permissions;
+    if (!permissions) {
       return false;
     }
     
     // Verificar si tiene al menos un permiso de lectura
-    const hasAnyReadPermission = userWithPermissions.Role.Permissions.some(
+    const hasAnyReadPermission = permissions.some(
       permission => permission.canRead === true
     );
     
@@ -143,12 +144,13 @@ export const useModulePermission = (
       return false;
     }
     
-    if (!moduleId || !userWithPermissions?.Role?.Permissions) {
+    const permissions = userWithPermissions?.role?.permissions || userWithPermissions?.Role?.Permissions;
+    if (!moduleId || !permissions) {
       return false;
     }
     
     // Buscar el permiso específico para este módulo
-    const modulePermission = userWithPermissions.Role.Permissions.find(
+    const modulePermission = permissions.find(
       (perm: Permission) => perm.moduleId === moduleId
     );
     
