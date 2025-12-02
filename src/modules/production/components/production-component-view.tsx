@@ -6,14 +6,18 @@ import { FiBox, FiTrendingUp, FiAlertTriangle } from 'react-icons/fi';
 import { ShieldAlert, Loader2 } from 'lucide-react';
 
 // 🔥 IMPORTAR SISTEMA DE PERMISOS OPTIMIZADO
-import { useModulePermissions } from '@/core/utils/permission-hooks';
-import { MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useAuthStore } from '@/core/store/auth';
 
 const ProductionComponentView: React.FC = () => {
   const [selectedView, setSelectedView] = useState<'producto' | 'produccion' | 'perdidas'>('producto');
 
-  // 🔥 USAR HOOK OPTIMIZADO DE PERMISOS - UNA SOLA LLAMADA
-  const { canView, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.PRODUCTION);
+  // 🔥 USAR HOOK SINGULAR QUE SÍ FUNCIONA (igual que Modules/Roles/Users)
+  const { hasPermission: canView, isLoading } = useModulePermission(MODULE_NAMES.PRODUCTION, 'canRead');
+  
+  const { userWithPermissions } = useAuthStore();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin';
 
   // 🔥 MOSTRAR LOADING MIENTRAS SE VERIFICAN PERMISOS
   if (isLoading) {

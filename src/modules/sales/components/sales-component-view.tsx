@@ -8,8 +8,8 @@ import InventoryComponentsView from './ inventory/inventory-view';
 import LossesComponentView from './losses/losses-view';
 import { StoreAttributes } from '../types/store';
 import { useStoreState } from '@/core/store/store';
-import { useModulePermissions } from '@/core/utils';
-import { MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useAuthStore } from '@/core/store/auth';
 import { Loader2, ShieldAlert } from 'lucide-react';
 import SelectedStoreIndicator from './store/selected-store-indicator';
 
@@ -17,8 +17,12 @@ const SalesView: React.FC = () => {
   const [activeTab, setActiveTab] = useState('informacion');
   const { selectedStore, setSelectedStore } = useStoreState();
 
-  // 🔥 USAR HOOK OPTIMIZADO DE PERMISOS - UNA SOLA LLAMADA
-  const { canView, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.SALES);
+  // 🔥 USAR HOOK SINGULAR QUE SÍ FUNCIONA (igual que Modules/Roles/Users)
+  const { hasPermission: canView, isLoading } = useModulePermission(MODULE_NAMES.SALES, 'canRead');
+  
+  const { userWithPermissions } = useAuthStore();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin';
 
   const handleStoreSelect = (store: StoreAttributes | null) => {
     console.log('🏪 Store selected in sales view:', store);

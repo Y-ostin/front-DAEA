@@ -15,8 +15,8 @@ import { useFetchCustomers } from '../hook/useCustomers';
 import { useQueryClient } from '@tanstack/react-query';
 
 // 🔥 IMPORTAR SISTEMA DE PERMISOS OPTIMIZADO
-import { useModulePermissions } from '@/core/utils/permission-hooks';
-import { MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useAuthStore } from '@/core/store/auth';
 
 const RentalsComponentView = () => {
   const [isCreateLocationModalOpen, setIsCreateLocationModalOpen] = useState(false);
@@ -33,8 +33,15 @@ const RentalsComponentView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const placesPerPage = 20;
 
-  // 🔥 USAR HOOK OPTIMIZADO DE PERMISOS - UNA SOLA LLAMADA
-  const { canView, canCreate, canEdit, canDelete, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.RENTALS);
+  // 🔥 USAR HOOK SINGULAR QUE SÍ FUNCIONA (igual que Modules/Roles/Users)
+  const { hasPermission: canView } = useModulePermission(MODULE_NAMES.RENTALS, 'canRead');
+  const { hasPermission: canCreate } = useModulePermission(MODULE_NAMES.RENTALS, 'canWrite');
+  const { hasPermission: canEdit } = useModulePermission(MODULE_NAMES.RENTALS, 'canEdit');
+  const { hasPermission: canDelete, isLoading } = useModulePermission(MODULE_NAMES.RENTALS, 'canDelete');
+  
+  const { userWithPermissions } = useAuthStore();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin';
 
   const { data: locations = [], isLoading: locationsLoading, error: locationsError } = useFetchLocations();
   const { data: places = [], isLoading: placesLoading, error: placesError } = useFetchPlacesByLocation(selectedLocation?.id || null, forceRefetchKey);

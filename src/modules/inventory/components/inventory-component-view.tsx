@@ -8,15 +8,19 @@ import MovementComponentView from './movements/movement-component-view';
 import BuysProductView from './resourcehouse/Product/buys-product-view';
 
 // 🔥 IMPORTAR SISTEMA DE PERMISOS OPTIMIZADO
-import { useModulePermissions } from '@/core/utils/permission-hooks';
-import { MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useAuthStore } from '@/core/store/auth';
 
 
 const InventoryComponentView: React.FC = () => {
   const [selectedView, setSelectedView] = useState<'movimientos' | 'almacen' | 'recursos' | 'proveedores' | 'compras'>('movimientos');
 
-  // 🔥 USAR HOOK OPTIMIZADO DE PERMISOS - UNA SOLA LLAMADA
-  const { canView, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.INVENTORY);
+  // 🔥 USAR HOOK SINGULAR QUE SÍ FUNCIONA (igual que Modules/Roles/Users)
+  const { hasPermission: canView, isLoading } = useModulePermission(MODULE_NAMES.INVENTORY, 'canRead');
+  
+  const { userWithPermissions } = useAuthStore();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin';
 
   // 🔥 DEBUG ADICIONAL PARA VERIFICAR ESTADO DEL USUARIO
   const debugUserInfo = () => {

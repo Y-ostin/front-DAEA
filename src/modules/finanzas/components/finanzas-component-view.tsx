@@ -5,8 +5,7 @@ import DetalleReporte from './detalleReporte/detalle-reporte-view';
 import ReporteComponentView from './reporte/reporte-view';
 import { useFetchFinancialReports } from '../../finanzas/hooks/useFinancialReports'; // Ajusta ruta si es necesario
 import { FinancialReport } from '../../finanzas/types/financialReport'; // Ajusta ruta si es necesario
-import { useModulePermissions } from '@/core/utils/permission-hooks';
-import { MODULE_NAMES } from '@/core/utils/useModulesMap';
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
 import { suppressAxios403Errors } from '@/core/utils/error-suppressor';
 import { useAuthStore } from '@/core/store/auth';
 import ModalListMonthlyExpenses from './reporte/modal-list-monthly-expenses';
@@ -15,8 +14,14 @@ const FinanzasComponentView: React.FC = () => {
   // 🔥 OBTENER USUARIO Y PERMISOS DESDE ZUSTAND STORE (NO DESDE /auth/me)
   const { user, userWithPermissions } = useAuthStore();
 
-  // 🔥 HOOK DE PERMISOS
-  const { canView, canCreate, canEdit, canDelete, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.FINANZAS);
+  // 🔥 USAR HOOK SINGULAR QUE SÍ FUNCIONA (igual que Modules/Roles/Users)
+  const { hasPermission: canView } = useModulePermission(MODULE_NAMES.FINANZAS, 'canRead');
+  const { hasPermission: canCreate } = useModulePermission(MODULE_NAMES.FINANZAS, 'canWrite');
+  const { hasPermission: canEdit } = useModulePermission(MODULE_NAMES.FINANZAS, 'canEdit');
+  const { hasPermission: canDelete, isLoading } = useModulePermission(MODULE_NAMES.FINANZAS, 'canDelete');
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin';
   
   const [selectedView, setSelectedView] = useState<'general' | 'detalle'>('general');
   const [isMonthlyModalOpen, setMonthlyModalOpen] = useState(false);
