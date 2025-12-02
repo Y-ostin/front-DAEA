@@ -1,5 +1,5 @@
 import api from '@/core/config/client';
-import { Place } from '../types';
+import { Place } from '../types/places';
 
 // Obtener todos los places
 export const fetchPlaces = async (): Promise<Place[]> => {
@@ -22,9 +22,9 @@ export const fetchPlaces = async (): Promise<Place[]> => {
     const transformedPlaces = rawPlaces.map((rawPlace: Record<string, unknown>) => {
       return {
         id: rawPlace.id as string,
-        nombre: (rawPlace.name as string) || '',
+        name: (rawPlace.name as string) || '',
         area: (rawPlace.area as string) || '',
-        location_id: rawPlace.location_id as string,
+        locationId: (rawPlace.locationId || rawPlace.location_id) as string,
         createdAt: rawPlace.createdAt as string,
         updatedAt: rawPlace.updatedAt as string,
       };
@@ -37,7 +37,7 @@ export const fetchPlaces = async (): Promise<Place[]> => {
   }
 };
 
-// Obtener places por location_id (FILTRANDO EN FRONTEND)
+// Obtener places por locationId (FILTRANDO EN FRONTEND)
 export const fetchPlacesByLocation = async (locationId: string): Promise<Place[]> => {
   try {
     // Obtener TODOS los places del backend
@@ -55,9 +55,9 @@ export const fetchPlacesByLocation = async (locationId: string): Promise<Place[]
       return [];
     }
 
-    // FILTRAR EN FRONTEND por location_id
+    // FILTRAR EN FRONTEND por locationId
     const filteredPlaces = rawPlaces.filter((place: Record<string, unknown>) => {
-      const placeLocationId = place.location_id as string;
+      const placeLocationId = (place.locationId || place.location_id) as string;
       return placeLocationId === locationId;
     });
 
@@ -65,9 +65,9 @@ export const fetchPlacesByLocation = async (locationId: string): Promise<Place[]
     const transformedPlaces = filteredPlaces.map((rawPlace: Record<string, unknown>) => {
       return {
         id: rawPlace.id as string,
-        nombre: (rawPlace.name as string) || '',
+        name: (rawPlace.name as string) || '',
         area: (rawPlace.area as string) || '',
-        location_id: rawPlace.location_id as string,
+        locationId: (rawPlace.locationId || rawPlace.location_id) as string,
         createdAt: rawPlace.createdAt as string,
         updatedAt: rawPlace.updatedAt as string,
       };
@@ -85,16 +85,16 @@ export const fetchPlacesByLocation = async (locationId: string): Promise<Place[]
 
 // Crear un nuevo place
 export const createPlace = async (placeData: {
-  nombre: string;
+  name: string;
   area: string;
-  location_id: string;
+  locationId: string;
 }): Promise<Place> => {
   try {
     // Transformar los datos del frontend al formato que espera el backend
     const backendPayload = {
-      name: placeData.nombre,
+      name: placeData.name,
       area: placeData.area,
-      location_id: placeData.location_id,
+      locationId: placeData.locationId,
     };
 
     const response = await api.post('/api/Places', backendPayload);

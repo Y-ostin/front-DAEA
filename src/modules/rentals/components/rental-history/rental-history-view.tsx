@@ -33,7 +33,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
 
   // Filtrar alquileres por el lugar específico
   const placeRentals = rentals.filter(rental => 
-    rental.place_id === placeId.toString()
+    rental.placeId === placeId.toString()
   );
 
   const userMap = new Map(users.map((user) => [user.id, user.name]));
@@ -101,7 +101,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                   {/* Comprador */}
                   <div className="text-gray-700 font-medium md:text-center">
                     <span className="block md:hidden font-bold text-red-600">Comprador:</span>
-                    {customerMap.get(rental.customer_id)?.full_name || 'Customer no encontrado'}
+                    {customerMap.get(rental.customerId)?.fullName || 'Customer no encontrado'}
                   </div>
                   {/* Lugar */}
                   <div className="text-gray-700 font-medium md:text-center">
@@ -111,17 +111,17 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                   {/* Vendedor */}
                   <div className="text-gray-700 font-medium md:text-center">
                     <span className="block md:hidden font-bold text-red-600">Vendedor:</span>
-                    {userMap.get(rental.user_id) || "Usuario desconocido"}
+                    {userMap.get(rental.userId) || "Usuario desconocido"}
                   </div>
                   {/* Fecha Inicio */}
                   <div className="text-gray-700 font-medium md:text-center">
                     <span className="block md:hidden font-bold text-red-600">Fecha Inicio:</span>
-                    {formatDate(rental.start_date)}
+                    {formatDate(rental.startDate)}
                   </div>
                   {/* Fecha Fin */}
                   <div className="text-gray-700 font-medium md:text-center">
                     <span className="block md:hidden font-bold text-red-600">Fecha Fin:</span>
-                    {formatDate(rental.end_date)}
+                    {formatDate(rental.endDate)}
                   </div>
                   {/* Monto */}
                   <div className="text-gray-700 font-medium md:text-center">
@@ -174,7 +174,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                           </span>
                         </div>
                         <p className="font-medium">
-                          {customerMap.get(rental.customer_id)?.full_name || 'N/A'}
+                          {customerMap.get(rental.customerId)?.fullName || 'N/A'}
                         </p>
                       </div>
                       <div>
@@ -182,7 +182,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                           <FiCreditCard className="text-red-500" size={16} />
                           <span className="text-gray-700 font-medium">DNI</span>
                         </div>
-                        <p className="font-medium">{customerMap.get(rental.customer_id)?.dni || 'N/A'}</p>
+                        <p className="font-medium">{customerMap.get(rental.customerId)?.dni || 'N/A'}</p>
                       </div>
                       <div>
                         <div className="flex justify-center items-center gap-2">
@@ -192,7 +192,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                           </span>
                         </div>
                         <p className="font-medium">
-                          {customerMap.get(rental.customer_id)?.phone || 'N/A'}
+                          {customerMap.get(rental.customerId)?.phone || 'N/A'}
                         </p>
                       </div>
                       <div>
@@ -203,7 +203,7 @@ const RentalHistoryView: React.FC<RentalHistoryViewProps> = ({
                           </span>
                         </div>
                         <p className="font-medium">
-                          {customerMap.get(rental.customer_id)?.email || 'N/A'}
+                          {customerMap.get(rental.customerId)?.email || 'N/A'}
                         </p>
                       </div>
                     </div>

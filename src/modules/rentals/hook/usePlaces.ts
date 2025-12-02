@@ -21,7 +21,7 @@ export const useFetchPlaces = () => {
   });
 };
 
-// ✅ Obtener places filtrados por location_id (usando cache si es posible)
+// ✅ Obtener places filtrados por locationId (usando cache si es posible)
 export const useFetchPlacesByLocation = (
   locationId: string | null,
   forceRefetchKey?: number
@@ -36,7 +36,7 @@ export const useFetchPlacesByLocation = (
       // Si tenemos datos en cache y es un array, filtrar localmente
       if (Array.isArray(allPlaces) && allPlaces.length > 0) {
         const filtered = allPlaces.filter(
-          (place: Place) => place.location_id === locationId
+          (place: Place) => place.locationId === locationId
         );
         return Promise.resolve(filtered);
       }
@@ -62,9 +62,9 @@ export const useCreatePlace = () => {
       queryClient.invalidateQueries({ queryKey: ['places', 'filtered'] });
       
       // Also invalidate any location-specific queries
-      if (data?.location_id) {
+      if (data?.locationId) {
         queryClient.invalidateQueries({ 
-          queryKey: ['places', 'filtered', data.location_id] 
+          queryKey: ['places', 'filtered', data.locationId] 
         });
       }
     },
@@ -86,9 +86,9 @@ export const useUpdatePlace = () => {
       queryClient.invalidateQueries({ queryKey: ['places', 'filtered'] });
       
       // Also invalidate any location-specific queries
-      if (data?.location_id) {
+      if (data?.locationId) {
         queryClient.invalidateQueries({ 
-          queryKey: ['places', 'filtered', data.location_id] 
+          queryKey: ['places', 'filtered', data.locationId] 
         });
       }
     },

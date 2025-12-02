@@ -59,7 +59,7 @@ const MuseumComponentView: React.FC = () => {
     thirtyDaysAgo.setDate(today.getDate() - 30);
 
     return data.filter(e => {
-      const entranceDate = new Date(e.sale_date);
+      const entranceDate = new Date(e.saleDate);
       entranceDate.setHours(0, 0, 0, 0); // Normalizar la hora para una comparación precisa
 
       if (dateFilter === 'last3days') {
@@ -307,22 +307,17 @@ const MuseumComponentView: React.FC = () => {
             {filteredData.length > 0 ? (
               filteredData.map((e) => (
                 <tr key={e.id} className="border-t hover:bg-gray-50 transition-colors">
-                  <td className="px-4 py-2">{e.user?.name || e.user_id}</td>
+                  <td className="px-4 py-2">{e.userName || e.userId}</td>
                   <td className="px-4 py-2">
                     <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm">
-                      {e.type_person?.name || 'N/A'}
+                      {e.typePersonName || 'N/A'}
                     </span>
-                    {e.type_person?.base_price && (
-                      <div className="text-xs text-gray-500">
-                        S/ {e.type_person.base_price.toFixed(2)}
-                      </div>
-                    )}
                   </td>
-                  <td className="px-4 py-2">{e.sale_date}</td>
+                  <td className="px-4 py-2">{e.saleDate}</td>
                   <td className="px-4 py-2">{e.cantidad}</td>
-                  <td className="px-4 py-2">{e.sales_channel?.name || e.sale_channel}</td>
-                  <td className="px-4 py-2">S/ {e.total_sale.toFixed(2)}</td>
-                  <td className="px-4 py-2">{e.payment_method_obj?.name || e.payment_method}</td>
+                  <td className="px-4 py-2">{e.saleChannelName || e.saleChannel}</td>
+                  <td className="px-4 py-2">S/ {e.totalSale.toFixed(2)}</td>
+                  <td className="px-4 py-2">{e.paymentMethodName || e.paymentMethod}</td>
                   <td className="px-4 py-2 text-center">
                     {e.free
                       ? <CheckCircle className="inline text-green-500" />

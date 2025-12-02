@@ -16,33 +16,33 @@ export const createRental = async (payload: CreateRentalPayload): Promise<Rental
   
   // ✅ Validaciones según especificaciones del backend
   const validations = {
-    customer_id: {
-      value: payload.customer_id,
-      isString: typeof payload.customer_id === 'string',
-      isNotEmpty: payload.customer_id.length > 0,
-      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.customer_id)
+    customerId: {
+      value: payload.customerId,
+      isString: typeof payload.customerId === 'string',
+      isNotEmpty: payload.customerId.length > 0,
+      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.customerId)
     },
-    place_id: {
-      value: payload.place_id,
-      isString: typeof payload.place_id === 'string',
-      isNotEmpty: payload.place_id.length > 0,
-      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.place_id)
+    placeId: {
+      value: payload.placeId,
+      isString: typeof payload.placeId === 'string',
+      isNotEmpty: payload.placeId.length > 0,
+      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.placeId)
     },
-    user_id: {
-      value: payload.user_id,
-      isString: typeof payload.user_id === 'string',
-      isNotEmpty: payload.user_id.length > 0,
-      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.user_id)
+    userId: {
+      value: payload.userId,
+      isString: typeof payload.userId === 'string',
+      isNotEmpty: payload.userId.length > 0,
+      isUUID: /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.userId)
     },
-    start_date: {
-      value: payload.start_date,
-      isDate: payload.start_date instanceof Date,
-      isValid: !isNaN(payload.start_date.getTime())
+    startDate: {
+      value: payload.startDate,
+      isDate: payload.startDate instanceof Date,
+      isValid: !isNaN(payload.startDate.getTime())
     },
-    end_date: {
-      value: payload.end_date,
-      isDate: payload.end_date instanceof Date,
-      isValid: !isNaN(payload.end_date.getTime())
+    endDate: {
+      value: payload.endDate,
+      isDate: payload.endDate instanceof Date,
+      isValid: !isNaN(payload.endDate.getTime())
     },
     amount: {
       value: payload.amount,
@@ -55,11 +55,11 @@ export const createRental = async (payload: CreateRentalPayload): Promise<Rental
 
   // ✅ Identificar errores específicos
   const errors = [];
-  if (!validations.customer_id.isUUID) errors.push(`customer_id "${payload.customer_id}" no es un UUID válido`);
-  if (!validations.place_id.isUUID) errors.push(`place_id "${payload.place_id}" no es un UUID válido`);
-  if (!validations.user_id.isUUID) errors.push(`user_id "${payload.user_id}" no es un UUID válido`);
-  if (!validations.start_date.isValid) errors.push('start_date no es una fecha válida');
-  if (!validations.end_date.isValid) errors.push('end_date no es una fecha válida');
+  if (!validations.customerId.isUUID) errors.push(`customerId "${payload.customerId}" no es un UUID válido`);
+  if (!validations.placeId.isUUID) errors.push(`placeId "${payload.placeId}" no es un UUID válido`);
+  if (!validations.userId.isUUID) errors.push(`userId "${payload.userId}" no es un UUID válido`);
+  if (!validations.startDate.isValid) errors.push('startDate no es una fecha válida');
+  if (!validations.endDate.isValid) errors.push('endDate no es una fecha válida');
   if (!validations.amount.isPositive) errors.push(`amount ${payload.amount} debe ser positivo`);
 
   if (errors.length > 0) {
@@ -68,24 +68,24 @@ export const createRental = async (payload: CreateRentalPayload): Promise<Rental
   }
 
   console.log('📤 Estructura detallada:', {
-    customer_id: payload.customer_id,
-    place_id: payload.place_id,
-    user_id: payload.user_id,
-    start_date: payload.start_date,
-    start_date_iso: payload.start_date.toISOString(),
-    end_date: payload.end_date,
-    end_date_iso: payload.end_date.toISOString(),
+    customerId: payload.customerId,
+    placeId: payload.placeId,
+    userId: payload.userId,
+    startDate: payload.startDate,
+    startDateIso: payload.startDate.toISOString(),
+    endDate: payload.endDate,
+    endDateIso: payload.endDate.toISOString(),
     amount: payload.amount
   });
   
   try {
     // ✅ Convertir fechas a formato ISO string (formato esperado por el backend)
     const backendPayload = {
-      customer_id: payload.customer_id,
-      place_id: payload.place_id,
-      user_id: payload.user_id,
-      start_date: payload.start_date.toISOString(), // "2025-08-05T14:00:00.000Z"
-      end_date: payload.end_date.toISOString(),     // "2025-08-08T18:00:00.000Z"
+      customerId: payload.customerId,
+      placeId: payload.placeId,
+      userId: payload.userId,
+      startDate: payload.startDate.toISOString(), // "2025-08-05T14:00:00.000Z"
+      endDate: payload.endDate.toISOString(),     // "2025-08-08T18:00:00.000Z"
       amount: payload.amount
     };
     

@@ -63,7 +63,7 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
       // @ts-expect-error - We know onDelete is passed as a prop
       onDelete?.({ 
         id: place.id, 
-        locationId: place.location_id 
+        locationId: place.locationId 
       });
     }
   };
@@ -102,11 +102,11 @@ const PlaceCard: React.FC<PlaceCardProps> = ({
 
       // Preparar datos para backend - SOLO datos reales
       const rentalPayload = {
-        customer_id: selectedCustomer.id, // UUID real del customer
-        place_id: place.id, // ID real del place
-        user_id: user.id, // ID real del usuario autenticado
-        start_date: new Date(`${rentalData.fechaInicio}T10:00:00.000Z`), // Date object
-        end_date: new Date(`${rentalData.fechaFin}T18:00:00.000Z`), // Date object
+        customerId: selectedCustomer.id, // UUID real del customer
+        placeId: place.id, // ID real del place
+        userId: user.id, // ID real del usuario autenticado
+        startDate: new Date(`${rentalData.fechaInicio}T10:00:00.000Z`), // Date object
+        endDate: new Date(`${rentalData.fechaFin}T18:00:00.000Z`), // Date object
         amount: Number(rentalData.monto), // Number
         status: rentalData.status || true, // Default to active
       };

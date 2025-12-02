@@ -45,7 +45,7 @@ const NewRentalModal: React.FC<NewRentalModalProps> = ({
 
   // Filtrar customers basado en la búsqueda
   const filteredCustomers = customers.filter((customer: Customer) =>
-    customer.full_name.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
+    customer.fullName.toLowerCase().includes(customerSearchQuery.toLowerCase()) ||
     customer.dni.toString().includes(customerSearchQuery)
   );
 
@@ -115,7 +115,7 @@ const NewRentalModal: React.FC<NewRentalModalProps> = ({
 
   const handleCustomerSelect = (customer: Customer) => {
     setFormData(prev => ({ ...prev, customerId: customer.id }));
-    setCustomerSearchQuery(customer.full_name);
+    setCustomerSearchQuery(customer.fullName);
     setShowCustomerDropdown(false);
   };
 
@@ -135,7 +135,7 @@ const NewRentalModal: React.FC<NewRentalModalProps> = ({
     queryClient.invalidateQueries({ queryKey: ['customers'] }).then(() => {
       refetchCustomers().then(() => {
         setFormData(prev => ({ ...prev, customerId: newCustomer.id }));
-        setCustomerSearchQuery(newCustomer.full_name);
+        setCustomerSearchQuery(newCustomer.fullName);
         setIsCustomerLoading(false);
       });
     });
@@ -192,7 +192,7 @@ const NewRentalModal: React.FC<NewRentalModalProps> = ({
                           <FiUser className="text-blue-600" size={14} />
                         </div>
                         <div>
-                          <div className="font-medium text-gray-900">{customer.full_name}</div>
+                          <div className="font-medium text-gray-900">{customer.fullName}</div>
                           <div className="text-sm text-gray-500">DNI: {customer.dni}</div>
                         </div>
                       </div>
@@ -225,7 +225,7 @@ const NewRentalModal: React.FC<NewRentalModalProps> = ({
               {/* Mostrar cliente seleccionado */}
               {selectedCustomer && (
                 <div className="mt-1 text-xs text-gray-600">
-                  Cliente seleccionado: {selectedCustomer.full_name}
+                  Cliente seleccionado: {selectedCustomer.fullName}
                 </div>
               )}
             </div>

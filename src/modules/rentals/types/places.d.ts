@@ -2,7 +2,7 @@ export interface Place {
   id: string;
   name: string;
   area: string;
-  location_id: string;
+  locationId: string;
   createdAt?: string;
   updatedAt?: string;
 }

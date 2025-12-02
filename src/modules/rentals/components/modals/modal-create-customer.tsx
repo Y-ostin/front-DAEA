@@ -17,7 +17,7 @@ const ModalCreateCustomer: React.FC<ModalCreateCustomerProps> = ({
   initialName = '',
 }) => {
   const [formData, setFormData] = useState<CreateCustomerRequest>({
-    full_name: initialName,
+    fullName: initialName,
     dni: 0,
     phone: '',
     email: '',
@@ -28,10 +28,10 @@ const ModalCreateCustomer: React.FC<ModalCreateCustomerProps> = ({
 
   // Actualizar el nombre cuando cambie initialName
   useEffect(() => {
-    if (initialName && initialName !== formData.full_name) {
-      setFormData(prev => ({ ...prev, full_name: initialName }));
+    if (initialName && initialName !== formData.fullName) {
+      setFormData(prev => ({ ...prev, fullName: initialName }));
     }
-  }, [initialName, formData.full_name]);
+  }, [initialName, formData.fullName]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -49,8 +49,8 @@ const ModalCreateCustomer: React.FC<ModalCreateCustomerProps> = ({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
-    if (!formData.full_name.trim()) {
-      newErrors.full_name = 'El nombre completo es requerido';
+    if (!formData.fullName.trim()) {
+      newErrors.fullName = 'El nombre completo es requerido';
     }
 
     if (!formData.dni || formData.dni <= 0) {
@@ -87,7 +87,7 @@ const ModalCreateCustomer: React.FC<ModalCreateCustomerProps> = ({
 
   const handleClose = () => {
     setFormData({
-      full_name: '',
+      fullName: '',
       dni: 0,
       phone: '',
       email: '',
@@ -120,24 +120,24 @@ const ModalCreateCustomer: React.FC<ModalCreateCustomerProps> = ({
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label htmlFor="full_name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
               Nombre Completo <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              id="full_name"
-              name="full_name"
-              value={formData.full_name}
+              id="fullName"
+              name="fullName"
+              value={formData.fullName}
               onChange={handleChange}
               className={`w-full p-2 border-2 rounded text-gray-700 focus:outline-none ${
-                errors.full_name 
+                errors.fullName 
                   ? 'border-red-500 focus:border-red-500' 
                   : 'border-orange-400 focus:border-red-500'
               }`}
               placeholder="Juan Pérez"
             />
-            {errors.full_name && (
-              <p className="text-red-500 text-xs mt-1">{errors.full_name}</p>
+            {errors.fullName && (
+              <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>
             )}
           </div>
 

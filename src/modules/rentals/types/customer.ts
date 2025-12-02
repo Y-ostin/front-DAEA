@@ -1,7 +1,7 @@
 // types/customer.ts
 export interface Customer {
   id: string
-  full_name: string
+  fullName: string
   dni: number
   phone: string
   email: string
@@ -10,14 +10,14 @@ export interface Customer {
 }
 
 export interface CreateCustomerRequest {
-  full_name: string
+  fullName: string
   dni: number
   phone: string
   email: string
 }
 
 export interface UpdateCustomerRequest {
-  full_name?: string
+  fullName?: string
   dni?: number
   phone?: string
   email?: string

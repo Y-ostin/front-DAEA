@@ -160,14 +160,14 @@ const ModalCreateVisitor: React.FC<ModalCreateVisitorProps> = ({ isOpen, onClose
     }
 
     const payload: EntrancePayload = {
-      user_id: String(userId),
-      type_person_id: String(tipoVisitante),
-      sale_date: fecha,
+      userId: String(userId),
+      typePersonId: String(tipoVisitante),
+      saleDate: fecha,
       cantidad: Number(cantidad),
-      sale_number: 'V-' + Date.now(),
-      sale_channel: String(canalVenta),
-      total_sale: parseFloat(monto), // monto ya es total
-      payment_method: String(tipoPago),
+      saleNumber: 'V-' + Date.now(),
+      saleChannel: String(canalVenta),
+      totalSale: parseFloat(monto), // monto ya es total
+      paymentMethod: String(tipoPago),
       free: gratis === 'Si',
     };
 

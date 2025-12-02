@@ -23,7 +23,7 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
   const [formData, setFormData] = useState({
     name: '',
     area: '',
-    location_id: locationId || ''
+    locationId: locationId || ''
   });
 
   const [locations, setLocations] = useState<Location[]>([]);
@@ -53,7 +53,7 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
       setFormData({
         name: '',
         area: '',
-        location_id: locationId || ''
+        locationId: locationId || ''
       });
       setFormError(null);
     }
@@ -62,8 +62,8 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { name, area, location_id } = formData;
-    if (!name || !area || !location_id) {
+    const { name, area, locationId } = formData;
+    if (!name || !area || !locationId) {
       setFormError('Todos los campos son obligatorios');
       return;
     }
@@ -73,7 +73,7 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
     const payload: CreatePlacePayload = {
       name,
       area,
-      location_id
+      locationId
     };
 
     createPlace.mutate(payload, {
@@ -84,7 +84,7 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
         setFormData({
           name: '',
           area: '',
-          location_id: locationId || ''
+          locationId: locationId || ''
         });
         
         if (onCreated) {
@@ -161,13 +161,13 @@ const ModalCreatePlace: React.FC<ModalCreatePlaceProps> = ({
           </div>
           
           <div>
-            <label htmlFor="location_id" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="locationId" className="block text-sm font-medium text-gray-700 mb-1">
               Ubicación
             </label>
             <select
-              id="location_id"
-              name="location_id"
-              value={formData.location_id}
+              id="locationId"
+              name="locationId"
+              value={formData.locationId}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-400"
               required

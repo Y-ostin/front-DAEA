@@ -1,8 +1,8 @@
 import api from '@/core/config/client';
 import { Place, CreatePlacePayload, UpdatePlacePayload } from '../types/places';
 
-export const fetchPlaces = async (location_id?: string): Promise<Place[]> => {
-  const url = location_id ? `/api/rentals/places?location_id=${location_id}` : '/api/rentals/places';
+export const fetchPlaces = async (locationId?: string): Promise<Place[]> => {
+  const url = locationId ? `/api/rentals/places?locationId=${locationId}` : '/api/rentals/places';
   const response = await api.get<Place[]>(url);
   return response.data;
 };

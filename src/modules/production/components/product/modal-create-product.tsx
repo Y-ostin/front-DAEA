@@ -69,7 +69,7 @@ const ModalCreateProducto: React.FC<ModalCreateProductoProps> = ({ isOpen, onClo
     // que puede manejar tanto texto como archivos.
     const formData = new FormData();
     formData.append('name', nombre);
-    formData.append('category_id', categoria);
+    formData.append('categoryId', categoria);
     formData.append('price', precio);
     formData.append('description', descripcion);
 
@@ -78,7 +78,7 @@ const ModalCreateProducto: React.FC<ModalCreateProductoProps> = ({ isOpen, onClo
       // El nombre 'image' DEBE coincidir con el del middleware de multer: upload.single('image')
       formData.append('image', imageFile);
     } else if (uploadMode === 'url' && imageUrl) {
-      formData.append('imagen_url', imageUrl);
+      formData.append('imagenUrl', imageUrl);
     }
 
     try {

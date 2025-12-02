@@ -17,7 +17,7 @@ const ModalEditPlace: React.FC<ModalEditPlaceProps> = ({ place, onClose, onUpdat
   const [formData, setFormData] = useState({
     name: place.name,
     area: place.area,
-    location_id: place.location_id
+    locationId: place.locationId
   });
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -51,13 +51,13 @@ const ModalEditPlace: React.FC<ModalEditPlaceProps> = ({ place, onClose, onUpdat
   }, [data, locations]);
 
   React.useEffect(() => {
-    if (formData.location_id && locations.length > 0) {
-      const foundLocation = locations.find(loc => String(loc.id).trim() === String(formData.location_id).trim());
+    if (formData.locationId && locations.length > 0) {
+      const foundLocation = locations.find(loc => String(loc.id).trim() === String(formData.locationId).trim());
       console.log('Location debug:', {
-        currentLocationId: formData.location_id,
+        currentLocationId: formData.locationId,
         locations,
         foundLocation,
-        locationIdType: typeof formData.location_id,
+        locationIdType: typeof formData.locationId,
         locationIds: locations.map(loc => ({
           id: loc.id,
           idType: typeof loc.id,
@@ -65,11 +65,11 @@ const ModalEditPlace: React.FC<ModalEditPlaceProps> = ({ place, onClose, onUpdat
         }))
       });
     }
-  }, [formData.location_id, locations]);
+  }, [formData.locationId, locations]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.area || !formData.location_id) {
+    if (!formData.name || !formData.area || !formData.locationId) {
       setFormError('Todos los campos son obligatorios.');
       return;
     }
@@ -151,13 +151,13 @@ const ModalEditPlace: React.FC<ModalEditPlaceProps> = ({ place, onClose, onUpdat
           </div>
 
           <div>
-            <label htmlFor="location_id" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="locationId" className="block text-sm font-medium text-gray-700 mb-1">
               Ubicación
             </label>
             <select
-              id="location_id"
-              name="location_id"
-              value={formData.location_id || ''}
+              id="locationId"
+              name="locationId"
+              value={formData.locationId || ''}
               onChange={handleChange}
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
               required

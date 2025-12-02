@@ -558,7 +558,7 @@ const RentalsComponentView = () => {
                         </div>
                         <div className="flex-1">
                           <h3 className="font-semibold text-gray-800 text-sm">
-                            {customer.full_name}
+                            {customer.fullName}
                           </h3>
                           <p className="text-gray-600 text-xs mt-1">
                             📧 {customer.email}

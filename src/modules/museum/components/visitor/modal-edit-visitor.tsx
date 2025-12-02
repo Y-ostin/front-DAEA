@@ -44,10 +44,10 @@ const ModalEditVisitor: React.FC<ModalEditVisitorProps> = ({ isOpen, onClose, on
   // Poblar campos cuando cambie initialData
   useEffect(() => {
     if (initialData) {
-      setTipoVisitante(initialData.type_person_id || '');
-      setCanalVenta(initialData.sale_channel || '');
-      setTipoPago(initialData.payment_method || '');
-      setFecha(initialData.sale_date || '');
+      setTipoVisitante(initialData.typePersonId || '');
+      setCanalVenta(initialData.saleChannel || '');
+      setTipoPago(initialData.paymentMethod || '');
+      setFecha(initialData.saleDate || '');
       setCantidad(initialData.cantidad ?? 1);
       setGratis(initialData.free ? 'Si' : 'No');
       // NO seteamos monto aquí directamente para evitar inconsistencias:
@@ -81,8 +81,8 @@ const ModalEditVisitor: React.FC<ModalEditVisitorProps> = ({ isOpen, onClose, on
       setMonto(total.toFixed(2));
     } else {
       // Si no hay tipo seleccionado y initialData trae total_sale, conservarlo (caso edición)
-      if (initialData && typeof initialData.total_sale === 'number') {
-        setMonto(Number(initialData.total_sale).toFixed(2));
+      if (initialData && typeof initialData.totalSale === 'number') {
+        setMonto(Number(initialData.totalSale).toFixed(2));
       } else {
         setMonto('');
       }
@@ -114,25 +114,25 @@ const ModalEditVisitor: React.FC<ModalEditVisitorProps> = ({ isOpen, onClose, on
     const payload: Partial<Omit<Entrance, 'id'>> = {};
 
     if (initialData) {
-      if (tipoVisitante && tipoVisitante !== initialData.type_person_id) payload.type_person_id = tipoVisitante;
-      if (canalVenta && canalVenta !== initialData.sale_channel) payload.sale_channel = canalVenta;
-      if (tipoPago && tipoPago !== initialData.payment_method) payload.payment_method = tipoPago;
-      if (fecha && fecha !== initialData.sale_date) payload.sale_date = fecha;
-      if (cantidad && cantidad !== initialData.cantidad) payload.cantidad = cantidad;
+      if (tipoVisitante && tipoVisitante !== initialData.typePersonId) (payload as any).typePersonId = tipoVisitante;
+      if (canalVenta && canalVenta !== initialData.saleChannel) (payload as any).saleChannel = canalVenta;
+      if (tipoPago && tipoPago !== initialData.paymentMethod) (payload as any).paymentMethod = tipoPago;
+      if (fecha && fecha !== initialData.saleDate) (payload as any).saleDate = fecha;
+      if (cantidad && cantidad !== initialData.cantidad) (payload as any).cantidad = cantidad;
       // parse monto a number y comparar contra total_sale
       const montoNum = monto === '' ? NaN : parseFloat(monto);
-      if (!Number.isNaN(montoNum) && montoNum !== initialData.total_sale) payload.total_sale = montoNum;
+      if (!Number.isNaN(montoNum) && montoNum !== initialData.totalSale) (payload as any).totalSale = montoNum;
       const freeValue = gratis === 'Si';
-      if (freeValue !== initialData.free) payload.free = freeValue;
+      if (freeValue !== initialData.free) (payload as any).free = freeValue;
     } else {
       // si no hay initialData (caso raro), enviar campos mínimos
-      payload.type_person_id = tipoVisitante;
-      payload.sale_channel = canalVenta;
-      payload.payment_method = tipoPago;
-      payload.sale_date = fecha;
-      payload.cantidad = cantidad;
-      payload.total_sale = monto === '' ? 0 : parseFloat(monto);
-      payload.free = gratis === 'Si';
+      (payload as any).typePersonId = tipoVisitante;
+      (payload as any).saleChannel = canalVenta;
+      (payload as any).paymentMethod = tipoPago;
+      (payload as any).saleDate = fecha;
+      (payload as any).cantidad = cantidad;
+      (payload as any).totalSale = monto === '' ? 0 : parseFloat(monto);
+      (payload as any).free = gratis === 'Si';
     }
 
     if (Object.keys(payload).length === 0) {
