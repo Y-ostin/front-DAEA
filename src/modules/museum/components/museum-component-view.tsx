@@ -1,7 +1,7 @@
 // MuseumComponentView.tsx
 import React, { useState, useMemo, useEffect } from 'react'
 import Image from 'next/image'
-import { PlusCircle, Pencil, Trash2, CheckCircle, XCircle, Filter, ShieldAlert, ShieldCheck } from 'lucide-react'
+import { PlusCircle, Pencil, Trash2, CheckCircle, XCircle, Filter, ShieldAlert } from 'lucide-react'
 import { useEntrance } from '../hook/useEntrance'
 import ModalEditEntrance from './visitor/modal-edit-visitor'
 import ModalDeleteEntrance from './visitor/modal-delete-visitor'
@@ -10,13 +10,23 @@ import { Entrance } from '../types/entrance'
 import ModalCreateVisitor from './visitor/modal-create-visitor'
 import { toast } from 'react-toastify'
 import { useQueryClient } from '@tanstack/react-query'
-import { useModulePermissions } from '@/core/utils/permission-hooks'
-import { MODULE_NAMES } from '@/core/utils/useModulesMap'
+import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap'
+import { useAuthStore } from '@/core/store/auth'
 import AccessDeniedModal from '@/core/utils/AccessDeniedModal'
 
 const MuseumComponentView: React.FC = () => {
   const queryClient = useQueryClient()
-  const { canView, canCreate, canEdit, canDelete, isLoading: isPermsLoading, isAdmin } = useModulePermissions(MODULE_NAMES.MUSEUM)
+  
+  // 🔥 USAR EL MISMO HOOK QUE MODULES, ROLES Y USERS
+  const { hasPermission: canView } = useModulePermission(MODULE_NAMES.MUSEUM, 'canRead')
+  const { hasPermission: canCreate } = useModulePermission(MODULE_NAMES.MUSEUM, 'canWrite')
+  const { hasPermission: canEdit } = useModulePermission(MODULE_NAMES.MUSEUM, 'canEdit')
+  const { hasPermission: canDelete, isLoading: isPermsLoading } = useModulePermission(MODULE_NAMES.MUSEUM, 'canDelete')
+  
+  const { userWithPermissions } = useAuthStore()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin' || (userWithPermissions as any)?.Role?.name === 'Admin'
+  
   const { data, loading, error, update, remove, refetch } = useEntrance()
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [isEditOpen, setIsEditOpen] = useState(false)
@@ -69,7 +79,7 @@ const MuseumComponentView: React.FC = () => {
   if (isPermsLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-gray-600">
-        <ShieldCheck className="h-10 w-10 text-green-600 mb-4" />
+        <ShieldAlert className="h-10 w-10 text-green-600 mb-4" />
         <p className="text-lg">Verificando permisos...</p>
       </div>
     )
@@ -94,7 +104,7 @@ const MuseumComponentView: React.FC = () => {
   }
 
   const handleCreateClick = () => {
-    if (!canCreate) {
+    if (!canCreate && !isAdmin) {
       setAccessDeniedAction('crear visitantes')
       setShowAccessDenied(true)
       return
@@ -103,7 +113,7 @@ const MuseumComponentView: React.FC = () => {
   }
 
   const handleEditClick = (entrance: Entrance) => {
-    if (!canEdit) {
+    if (!canEdit && !isAdmin) {
       setAccessDeniedAction('editar visitantes')
       setShowAccessDenied(true)
       return
@@ -113,7 +123,7 @@ const MuseumComponentView: React.FC = () => {
   }
 
   const handleDeleteClick = (entrance: Entrance) => {
-    if (!canDelete) {
+    if (!canDelete && !isAdmin) {
       setAccessDeniedAction('eliminar visitantes')
       setShowAccessDenied(true)
       return
@@ -123,7 +133,7 @@ const MuseumComponentView: React.FC = () => {
   }
 
   const handleTicketTypesClick = () => {
-    if (!canEdit) {
+    if (!canEdit && !isAdmin) {
       setAccessDeniedAction('gestionar tipos de tickets')
       setShowAccessDenied(true)
       return
@@ -239,7 +249,7 @@ const MuseumComponentView: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
         <h2 className="text-3xl font-semibold text-red-700 mb-2 sm:mb-0">Lista de Visitantes</h2>
         <div className="flex flex-col sm:flex-row justify-end gap-2 w-full sm:w-auto">
-          {canCreate && (
+          {(canCreate || isAdmin) && (
             <button
               onClick={handleCreateClick}
               className="flex items-center justify-center bg-red-700 text-white px-4 py-2 rounded-3xl whitespace-nowrap"
@@ -247,7 +257,7 @@ const MuseumComponentView: React.FC = () => {
               <PlusCircle className="mr-2" /> Nuevo Visitante
             </button>
           )}
-          {canEdit && (
+          {(canEdit || isAdmin) && (
             <button
               onClick={handleTicketTypesClick}
               className="flex items-center justify-center bg-red-700 text-white px-4 py-2 rounded-3xl whitespace-nowrap"
