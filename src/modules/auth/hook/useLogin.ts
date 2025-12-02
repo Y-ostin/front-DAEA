@@ -60,8 +60,19 @@ export const useAdminLogin = () => {
         console.log('🎉 ¡LOGIN COMPLETO!', {
           name: normalizedUser.name,
           role: normalizedUser.role?.name,
-          permissions: normalizedUser.role?.permissions?.length || 0
+          permissions: normalizedUser.role?.permissions?.length || 0,
+          permissionsData: normalizedUser.role?.permissions
         });
+        
+        console.log('📋 PERMISOS DETALLADOS:', 
+          normalizedUser.role?.permissions?.map(p => ({
+            modulo: p.moduleName,
+            canRead: p.canRead,
+            canWrite: p.canWrite,
+            canEdit: p.canEdit,
+            canDelete: p.canDelete
+          }))
+        );
         
       } catch (error) {
         console.error('❌ Error procesando datos del login:', error);

@@ -101,21 +101,22 @@ export const useModulesMap = () => {
  * ⚠️ IMPORTANTE: Este es el ÚNICO lugar donde se definen MODULE_NAMES
  * No duplicar en otros archivos - importar desde aquí
  * 
- * Estos nombres deben coincidir EXACTAMENTE con los nombres
- * en tu backend (el array de módulos que me mostraste)
+ * Estos nombres deben coincidir EXACTAMENTE con los nombres en el backend
+ * Nombres obtenidos del backend: Ventas, Produccion, Museo, Iglesia, inventario, 
+ * modulos, Finanzas, Monasterio, Alquileres, roles, user
  */
 export const MODULE_NAMES = {
-  MODULES: 'modulos',
-  USERS: 'user', 
-  ROLES: 'roles',
-  INVENTORY: 'inventario',
-  PRODUCTION: 'Produccion',
-  SALES: 'Ventas',
-  MUSEUM: 'Museo', 
-  RENTALS: 'Alquileres', 
-  FINANZAS: 'Finanzas',
-  MONASTERIO: 'Monasterio',
-  CHURCH: 'Iglesia',
+  MODULES: 'modulos',        // Backend: "modulos"
+  USERS: 'user',             // Backend: "user"
+  ROLES: 'roles',            // Backend: "roles"
+  INVENTORY: 'inventario',   // Backend: "inventario"
+  PRODUCTION: 'Produccion',  // Backend: "Produccion"
+  SALES: 'Ventas',           // Backend: "Ventas"
+  MUSEUM: 'Museo',           // Backend: "Museo"
+  RENTALS: 'Alquileres',     // Backend: "Alquileres"
+  FINANZAS: 'Finanzas',      // Backend: "Finanzas"
+  MONASTERIO: 'Monasterio',  // Backend: "Monasterio"
+  CHURCH: 'Iglesia',         // Backend: "Iglesia"
 } as const;
 
 /**
