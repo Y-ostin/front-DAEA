@@ -1,7 +1,7 @@
 import api from '@/core/config/client';
 import { Entrance, EntrancePayload } from '../types/entrance';
 
-const BASE_URL = '/entrance';
+const BASE_URL = '/api/Entrance';
 
 export const getEntrances = async (): Promise<Entrance[]> => {
   const res = await api.get<Entrance[]>(BASE_URL);
@@ -19,7 +19,7 @@ export const createEntrance = async (data: EntrancePayload): Promise<Entrance> =
 };
 
 export const updateEntrance = async (id: string, data: Partial<EntrancePayload>): Promise<Entrance> => {
-  const res = await api.patch<Entrance>(`${BASE_URL}/${id}`, data);
+  const res = await api.put<Entrance>(`${BASE_URL}/${id}`, data);
   return res.data;
 };
 

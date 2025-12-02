@@ -4,7 +4,7 @@ import { Customer, CreateCustomerRequest, UpdateCustomerRequest, CustomerRespons
 // Obtener todos los customers
 export const fetchCustomers = async (): Promise<Customer[]> => {
   try {
-    const response = await api.get<CustomerResponse>('/customer');
+    const response = await api.get<CustomerResponse>('/api/Customer');
     if (response.data.success && Array.isArray(response.data.data)) {
       return response.data.data;
     }
@@ -17,7 +17,7 @@ export const fetchCustomers = async (): Promise<Customer[]> => {
 
 // Crear un nuevo customer
 export const createCustomer = async (customerData: CreateCustomerRequest): Promise<Customer> => {
-  const response = await api.post<CustomerResponse>('/customer', customerData);
+  const response = await api.post<CustomerResponse>('/api/Customer', customerData);
   if (response.data.success && response.data.data && !Array.isArray(response.data.data)) {
     return response.data.data;
   }
@@ -27,7 +27,7 @@ export const createCustomer = async (customerData: CreateCustomerRequest): Promi
 // Actualizar un customer
 export const updateCustomer = async (id: string, customerData: UpdateCustomerRequest): Promise<Customer> => {
   try {
-    const response = await api.put<CustomerResponse>(`/customer/${id}`, customerData);
+    const response = await api.put<CustomerResponse>(`/api/Customer/${id}`, customerData);
     if (response.data.success && response.data.data && !Array.isArray(response.data.data)) {
       return response.data.data;
     }
@@ -41,7 +41,7 @@ export const updateCustomer = async (id: string, customerData: UpdateCustomerReq
 // Eliminar un customer
 export const deleteCustomer = async (id: string): Promise<void> => {
   try {
-    const response = await api.delete<CustomerResponse>(`/customer/${id}`);
+    const response = await api.delete<CustomerResponse>(`/api/Customer/${id}`);
     if (!response.data.success) {
       throw new Error(response.data.message || 'Error deleting customer');
     }
@@ -54,7 +54,7 @@ export const deleteCustomer = async (id: string): Promise<void> => {
 // Buscar customers por nombre
 export const searchCustomers = async (query: string): Promise<Customer[]> => {
   try {
-    const response = await api.get<CustomerResponse>(`/customer/search?q=${encodeURIComponent(query)}`);
+    const response = await api.get<CustomerResponse>(`/api/Customer/search?q=${encodeURIComponent(query)}`);
     if (response.data.success && Array.isArray(response.data.data)) {
       return response.data.data;
     }

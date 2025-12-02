@@ -5,7 +5,7 @@ import {
   UpdateMonasteryExpensePayload,
 } from '../types/monasteryExpenses';
 
-const MONASTERY_EXPENSES_ENDPOINT = '/monasteryExpenses';
+const MONASTERY_EXPENSES_ENDPOINT = '/api/MonasteryExpenses';
 
 /**
  * Llama a: GET /monasteryExpenses
@@ -45,7 +45,7 @@ export const updateMonasteryExpense = async (
   id: string,
   payload: UpdateMonasteryExpensePayload
 ): Promise<MonasteryExpenses> => {
-  const response = await api.patch<MonasteryExpenses>(
+  const response = await api.put<MonasteryExpenses>(
     `${MONASTERY_EXPENSES_ENDPOINT}/${id}`,
     payload
   );

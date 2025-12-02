@@ -5,7 +5,7 @@ import {
   UpdateOverheadPayload,
 } from "../types/overheads";
 
-const OVERHEADS_ENDPOINT = "/overhead";
+const OVERHEADS_ENDPOINT = "/api/Overhead";
 
 /**
  * Llama a: GET /overhead/all
@@ -62,7 +62,7 @@ export const updateOverhead = async (
   id: string,
   payload: UpdateOverheadPayload
 ): Promise<Overhead> => {
-  const response = await api.patch<Overhead>(
+  const response = await api.put<Overhead>(
     `${OVERHEADS_ENDPOINT}/${id}`,
     payload
   );
