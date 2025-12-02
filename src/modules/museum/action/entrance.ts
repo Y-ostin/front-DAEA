@@ -1,7 +1,7 @@
 import api from '@/core/config/client';
 import { Entrance, EntrancePayload } from '../types/entrance';
 
-const BASE_URL = '/api/Entrance';
+const BASE_URL = '/api/museum/entrances';
 
 export const getEntrances = async (): Promise<Entrance[]> => {
   const res = await api.get<Entrance[]>(BASE_URL);

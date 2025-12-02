@@ -5,7 +5,7 @@ import {
   UpdateReportPayload
 } from '../types/financialReport.d';
 
-const REPORTS_ENDPOINT = '/api/FinancialReport';
+const REPORTS_ENDPOINT = '/api/FinancialReports';
 
 /**
  * Obtiene todos los reportes financieros.

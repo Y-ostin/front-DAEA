@@ -5,7 +5,7 @@ import {
   UpdateOverheadPayload,
 } from "../types/overheads";
 
-const OVERHEADS_ENDPOINT = "/api/Overhead";
+const OVERHEADS_ENDPOINT = "/api/Overheads";
 
 /**
  * Llama a: GET /overhead/all
