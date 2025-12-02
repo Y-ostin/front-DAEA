@@ -141,8 +141,8 @@ const ModuleList: React.FC = () => {
     );
   }
   
-  // 🔥 SOLO ESPERAR PERMISOS SI NO HAY ERROR 403
-  if (permissionsLoading) return <div className="text-center text-red-800 font-semibold">Verificando permisos...</div>;
+  // 🔥 SOLO ESPERAR PERMISOS SI NO ES ADMIN (Admin tiene acceso inmediato)
+  if (permissionsLoading && !isAdmin) return <div className="text-center text-red-800 font-semibold">Verificando permisos...</div>;
   
   // 🔥 VERIFICAR OTROS ERRORES (que no sean 403)
   if (error && !is403Error) {

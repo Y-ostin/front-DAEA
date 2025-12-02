@@ -330,7 +330,8 @@ const MonasteryComponentView: React.FC = () => {
   const is403ErrorExpenses = expenseError && (expenseError.message.includes('403') || expenseError.message.includes('Forbidden'));
 
   // 🔥 EARLY RETURNS PARA ESTADOS DE CARGA Y ERRORES
-  if (permissionsLoading) {
+  // 🔥 SOLO ESPERAR PERMISOS SI NO ES ADMIN (Admin tiene acceso inmediato)
+  if (permissionsLoading && !isAdmin) {
     return <div className="text-center text-red-800 font-semibold">Cargando módulo...</div>;
   }
 

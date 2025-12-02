@@ -101,7 +101,8 @@ export default function ReporteComponentView() {
   }, [reportesError, incomesError, expensesError, is403Error]);
 
   // 🔥 PANTALLA DE ACCESO DENEGADO
-  if (permissionsLoading) {
+  // 🔥 SOLO ESPERAR PERMISOS SI NO ES ADMIN (Admin tiene acceso inmediato)
+  if (permissionsLoading && !isAdmin) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
         <div className="text-center">

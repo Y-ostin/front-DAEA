@@ -96,7 +96,8 @@ const FinanzasComponentView: React.FC = () => {
   const detalleProp = mapToDetalleReporteProp(selectedReporteFull);
 
   // 🔥 VERIFICACIÓN DE CARGA INICIAL
-  if (isLoading) {
+  // 🔥 SOLO ESPERAR PERMISOS SI NO ES ADMIN (Admin tiene acceso inmediato)
+  if (isLoading && !isAdmin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
