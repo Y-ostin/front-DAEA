@@ -32,12 +32,12 @@ const convertFrontendToBackend = (frontendPermission: {
 });
 
 export const fetchPermissions = async (): Promise<Permission[]> =>{
-    const response = await api.get<Permission[]>('/permissions');
+    const response = await api.get<Permission[]>('/api/Permissions');
     return response.data;
 }
 
 export const getPermission = async (id: string): Promise<Permission> =>{
-    const response = await api.get<Permission>(`/permissions/${id}`);
+    const response = await api.get<Permission>(`/api/Permissions/${id}`);
     return response.data;
 }
 
@@ -46,34 +46,34 @@ export const getPermissionsByRole = async (roleId: string): Promise<Permission[]
     console.log('🔍 Obteniendo permisos para rol:', roleId);
     try {
         // PRIMERA OPCIÓN: Intentar con el endpoint del rol
-        console.log('🔍 Intentando con endpoint /roles/${roleId}...');
-        const roleResponse = await api.get(`/roles/${roleId}`);
+        console.log('🔍 Intentando con endpoint /api/Roles/${roleId}/permissions...');
+        const roleResponse = await api.get(`/api/Roles/${roleId}/permissions`);
         console.log('✅ Respuesta del rol:', roleResponse.data);
         console.log('🔍 DEBUG - Response completo:', JSON.stringify(roleResponse.data, null, 2));
         
         const roleData = roleResponse.data;
-        console.log('🔍 roleData.Permissions:', roleData.Permissions);
-        console.log('🔍 Es array?', Array.isArray(roleData.Permissions));
-        console.log('🔍 Longitud:', roleData.Permissions?.length);
+        console.log('🔍 roleData:', roleData);
+        console.log('🔍 Es array?', Array.isArray(roleData));
+        console.log('🔍 Longitud:', roleData?.length);
         
-        // 🚨 DEBUG CRÍTICO: Verificar IDs de permisos duplicados
-        if (roleData.Permissions && Array.isArray(roleData.Permissions)) {
+        // El endpoint /api/Roles/{id}/permissions devuelve un array directo
+        if (Array.isArray(roleData)) {
             console.log('🚨 VERIFICANDO IDs DE PERMISOS:');
-            roleData.Permissions.forEach((perm: Record<string, unknown>, index: number) => {
+            roleData.forEach((perm: Record<string, unknown>, index: number) => {
                 console.log(`  [${index}] Permiso ID: ${perm.id} | Módulo: ${(perm.Module as Record<string, unknown>)?.name} | roleId consultado: ${roleId}`);
             });
             
-            console.log('📋 Permisos RAW del backend:', roleData.Permissions);
-            const convertedPermissions = roleData.Permissions.map(convertBackendToFrontend);
+            console.log('📋 Permisos RAW del backend:', roleData);
+            const convertedPermissions = roleData.map(convertBackendToFrontend);
             console.log('🔄 Permisos convertidos (canEdit -> canUpdate):', convertedPermissions);
             return convertedPermissions;
         }
         
         // SEGUNDA OPCIÓN: Si el rol no tiene permisos, intentar con endpoint de permisos directamente
-        console.log('⚠️ No se encontraron permisos en el rol, intentando con /permissions...');
+        console.log('⚠️ No se encontraron permisos en el rol, intentando con /api/Permissions...');
         
         try {
-            const permissionsResponse = await api.get(`/permissions?roleId=${roleId}`);
+            const permissionsResponse = await api.get(`/api/Permissions?roleId=${roleId}`);
             console.log('✅ Respuesta de permisos directos:', permissionsResponse.data);
             
             if (permissionsResponse.data && Array.isArray(permissionsResponse.data)) {
@@ -94,7 +94,7 @@ export const getPermissionsByRole = async (roleId: string): Promise<Permission[]
 }
 
 export const createPermission = async (payload: CreatePermissionPayload): Promise<Permission> =>{
-    const response = await api.post<Permission>('/permissions', payload);
+    const response = await api.post<Permission>('/api/Permissions', payload);
     return response.data;
 }
 
@@ -120,12 +120,12 @@ export const updatePermission = async (id: string, payload: UpdatePermissionPayl
     console.log('🔄 Payload convertido (canUpdate -> canEdit):', convertedPayload);
     
     // 🆕 NUEVA URL: Usar endpoint específico para el rol
-    const response = await api.patch<Permission>(`/permissions/role/${id}`, convertedPayload);
+    const response = await api.put<Permission>(`/api/Roles/${id}/permissions`, convertedPayload);
     
     console.log('✅ Respuesta de API - updatePermissionForRole:', response.data);
     return response.data;
 }
 
 export const deletePermission = async (id: string): Promise<void> =>{
-    await api.delete(`/permissions/${id}`);
+    await api.delete(`/api/Permissions/${id}`);
 }

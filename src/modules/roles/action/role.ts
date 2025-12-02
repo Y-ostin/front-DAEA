@@ -54,7 +54,7 @@ export const updateRolePermissions = async (roleId: string, payload: UpdatePermi
     console.log('🔄 Payload enviado al backend:', convertedPayload);
     
     // Usar el endpoint correcto según tu backend
-    const response = await api.put<UpdatePermissionResponse>(`/api/Permissions/role/${roleId}`, convertedPayload);
+    const response = await api.put<UpdatePermissionResponse>(`/api/Roles/${roleId}/permissions`, convertedPayload);
     
     console.log('✅ Permisos actualizados exitosamente:', response.data);
     return response.data;
