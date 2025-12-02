@@ -37,7 +37,7 @@ const ModalEditSales: React.FC<ModalEditSalesProps> = ({ isOpen, onClose, curren
   const { data: allSalesDetails = [], isLoading: loadingSalesDetails } = useFetchSalesDetails();
   const { data: allProducts = [], isLoading: loadingProducts } = useFetchProducts();
   const { data: storesData, isLoading: loadingStores } = useFetchStores(); // Obtener las tiendas
-  const stores = storesData?.stores || [];
+  const stores = storesData?.data || [];
   
   // Estados del formulario
   const [tienda, setTienda] = useState('');

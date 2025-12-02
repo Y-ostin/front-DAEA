@@ -36,7 +36,7 @@ const ModalCreateSales: React.FC<ModalCreateSalesProps> = ({
   const { data: allProducts = [], isLoading: loadingProducts } =
     useFetchProducts();
   const { data: storesData, isLoading: loadingStores } = useFetchStores(); // Obtener las tiendas
-  const stores = storesData?.stores || [];
+  const stores = storesData?.data || [];
   const { selectedStore } = useStoreState();
   const { data: warehouseStoreItems = [] } = useFetchWarehouseStoreItems();
   const [selectedProductId, setSelectedProductId] = useState("");

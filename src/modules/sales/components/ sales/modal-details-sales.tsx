@@ -12,7 +12,7 @@ interface ModalDetailSalesProps {
 
 const ModalDetailSales: React.FC<ModalDetailSalesProps> = ({ isOpen, onClose, saleDetail }) => {
   const { data: storesData } = useFetchStores(); // Obtener las tiendas
-  const stores = storesData?.stores || [];
+  const stores = storesData?.data || [];
   const { 
     data: allSalesDetails = [], 
     isLoading: loadingSalesDetails, 
