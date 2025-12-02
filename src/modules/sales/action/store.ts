@@ -28,14 +28,14 @@ export const fetchStores = async (page: number = 1, limit: number = 10): Promise
 
 // Obtener una tienda por ID
 export const fetchStoreById = async (id: string): Promise<StoreAttributes> => {
-  const response = await api.get(`/store/${id}`);
+  const response = await api.get(`/api/store/${id}`);
   return response.data;
 };
 
 // Crear una nueva tienda
 export const createStore = async (data: CreateStoreRequest): Promise<StoreAttributes> => {
   try {
-    const response = await api.post('/store', data);  
+    const response = await api.post('/api/store', data);  
     return response.data;
   } catch (error) {
     console.error('Error creating store:', error);
@@ -63,7 +63,7 @@ export const deleteStore = async (id: string): Promise<void> => {
 
 // Buscar tiendas por nombre
 export const searchStores = async (query: string): Promise<StoreAttributes[]> => {
-  const response = await api.get('/store', {
+  const response = await api.get('/api/store', {
     params: { search: query }
   });
   // Si la API devuelve paginado, extraer solo las tiendas
