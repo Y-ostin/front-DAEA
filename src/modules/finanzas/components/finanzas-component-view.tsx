@@ -8,14 +8,12 @@ import { FinancialReport } from '../../finanzas/types/financialReport'; // Ajust
 import { useModulePermissions } from '@/core/utils/permission-hooks';
 import { MODULE_NAMES } from '@/core/utils/useModulesMap';
 import { suppressAxios403Errors } from '@/core/utils/error-suppressor';
-import { useCurrentUser } from '@/modules/auth/hook/useCurrentUser';
 import { useAuthStore } from '@/core/store/auth';
 import ModalListMonthlyExpenses from './reporte/modal-list-monthly-expenses';
 
 const FinanzasComponentView: React.FC = () => {
-  // 🔥 OBTENER USUARIO ACTUAL CON SUS PERMISOS DESDE /auth/me
-  const { user } = useAuthStore();
-  const { data: currentUserWithPermissions, isLoading: usersLoading } = useCurrentUser();
+  // 🔥 OBTENER USUARIO Y PERMISOS DESDE ZUSTAND STORE (NO DESDE /auth/me)
+  const { user, userWithPermissions } = useAuthStore();
 
   // 🔥 HOOK DE PERMISOS
   const { canView, canCreate, canEdit, canDelete, isLoading, isAdmin } = useModulePermissions(MODULE_NAMES.FINANZAS);
@@ -42,16 +40,15 @@ const FinanzasComponentView: React.FC = () => {
     if (process.env.NODE_ENV === 'development') {
       console.log('🔍 FinanzasComponent - Análisis de Permisos:', {
         userId: user?.id,
-        userFound: !!currentUserWithPermissions,
-        roleName: (currentUserWithPermissions as any)?.Role?.name,
+        userFound: !!userWithPermissions,
+        roleName: (userWithPermissions as any)?.role?.name,
         moduleName: MODULE_NAMES.FINANZAS,
         permisos: { canView, canCreate, canEdit, canDelete, isAdmin },
-        usersLoading,
         hasError: !!error,
         is403Error
       });
     }
-  }, [user, currentUserWithPermissions, canView, canCreate, canEdit, canDelete, isAdmin, usersLoading, error, is403Error]);
+  }, [user, userWithPermissions, canView, canCreate, canEdit, canDelete, isAdmin, error, is403Error]);
 
   // Cuando cambian los reportes, selecciono el primero por defecto (si existe)
   useEffect(() => {
@@ -73,13 +70,13 @@ const FinanzasComponentView: React.FC = () => {
   useEffect(() => {
     // Si detectamos un error 403 después de que el usuario ya estaba autenticado
     // esto significa que sus permisos fueron revocados
-    if (is403Error && currentUserWithPermissions) {
+    if (is403Error && userWithPermissions) {
       console.warn('⚠️ Permisos revocados detectados en Finanzas - recargando página');
       setTimeout(() => {
         window.location.reload();
       }, 2000); // Dar tiempo para mostrar el mensaje
     }
-  }, [is403Error, currentUserWithPermissions]);
+  }, [is403Error, userWithPermissions]);
 
   // Encuentro el reporte completo a pasar a DetalleReporte y hago el mapeo de campos
   const selectedReporteFull: FinancialReport | undefined = reportes.find(r => r.id === selectedReportId);
@@ -98,8 +95,8 @@ const FinanzasComponentView: React.FC = () => {
 
   const detalleProp = mapToDetalleReporteProp(selectedReporteFull);
 
-  // 🔥 VERIFICACIÓN DE CARGA INICIAL (usuarios + permisos)
-  if (isLoading || usersLoading) {
+  // 🔥 VERIFICACIÓN DE CARGA INICIAL
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -178,8 +175,8 @@ const FinanzasComponentView: React.FC = () => {
           <div className="mt-4 p-3 bg-gray-100 rounded-lg text-xs text-center">
             <p className="font-mono">
               📋 Permisos FINANZAS - 
-              Usuario: {(currentUserWithPermissions as any)?.name || 'No encontrado'} | 
-              Rol: {(currentUserWithPermissions as any)?.Role?.name || 'Sin rol'} | 
+              Usuario: {(userWithPermissions as any)?.name || 'No encontrado'} | 
+              Rol: {(userWithPermissions as any)?.role?.name || 'Sin rol'} | 
               Ver: {canView ? '✅' : '❌'} | 
               Crear: {canCreate ? '✅' : '❌'} | 
               Editar: {canEdit ? '✅' : '❌'} | 

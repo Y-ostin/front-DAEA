@@ -14,12 +14,11 @@ import {
 } from '@/modules/monastery/hooks/useMonasteryExpense';
 import { MonasteryExpenses } from '@/modules/monastery/types/monasteryExpenses';
 
-// 🔥 IMPORTAR SISTEMA DE PERMISOS Y HOOK DE USUARIO ACTUAL
+// 🔥 IMPORTAR SISTEMA DE PERMISOS
 import { 
   AccessDeniedModal,
 } from '@/core/utils';
 import { useModulePermission, MODULE_NAMES } from '@/core/utils/useModulesMap';
-import { useCurrentUser } from '@/modules/auth/hook/useCurrentUser';
 import { useAuthStore } from '@/core/store/auth';
 import { suppressAxios403Errors } from '@/core/utils/error-suppressor';
 import { useQueryClient } from '@tanstack/react-query';
@@ -46,9 +45,8 @@ const MonasteryComponentView: React.FC = () => {
   // 🔥 SISTEMA DE PERMISOS COMPLETO
   const queryClient = useQueryClient();
   
-  // 🔥 OBTENER USUARIO ACTUAL CON SUS PERMISOS DESDE /auth/me
-  const { user } = useAuthStore();
-  const { data: currentUserWithPermissions, isLoading: usersLoading } = useCurrentUser();
+  // 🔥 OBTENER USUARIO Y PERMISOS DESDE ZUSTAND STORE (NO DESDE /auth/me)
+  const { user, userWithPermissions } = useAuthStore();
   
   // 🔥 VERIFICAR PERMISOS USANDO EL SISTEMA DINÁMICO
   const { 
@@ -61,7 +59,7 @@ const MonasteryComponentView: React.FC = () => {
   const { hasPermission: canDelete } = useModulePermission(MODULE_NAMES.MONASTERIO, 'canDelete');
   
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isAdmin = (currentUserWithPermissions as any)?.Role?.name === 'Admin';
+  const isAdmin = (userWithPermissions as any)?.role?.name === 'Admin';
   
   const [showAccessDenied, setShowAccessDenied] = useState(false);
   const [accessDeniedAction, setAccessDeniedAction] = useState('');
@@ -74,12 +72,11 @@ const MonasteryComponentView: React.FC = () => {
   // 🔥 DEBUG: Ver permisos actuales
   console.log('🔍 MonasteryComponent - Análisis de Permisos:', {
     userId: user?.id,
-    userFound: !!currentUserWithPermissions,
+    userFound: !!userWithPermissions,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    roleName: (currentUserWithPermissions as any)?.Role?.name,
+    roleName: (userWithPermissions as any)?.role?.name,
     moduleName: MODULE_NAMES.MONASTERIO,
     permisos: { canView, canEdit, canCreate, canDelete, isAdmin },
-    usersLoading,
     permissionsLoading
   });
 
@@ -333,8 +330,8 @@ const MonasteryComponentView: React.FC = () => {
   const is403ErrorExpenses = expenseError && (expenseError.message.includes('403') || expenseError.message.includes('Forbidden'));
 
   // 🔥 EARLY RETURNS PARA ESTADOS DE CARGA Y ERRORES
-  if (usersLoading || permissionsLoading) {
-    return <div className="text-center text-red-800 font-semibold">Cargando módulo y permisos...</div>;
+  if (permissionsLoading) {
+    return <div className="text-center text-red-800 font-semibold">Cargando módulo...</div>;
   }
 
   // 🔥 VERIFICAR ERROR 403 INMEDIATAMENTE - NO ESPERAR A PERMISOS
@@ -909,9 +906,9 @@ const MonasteryComponentView: React.FC = () => {
           <p className="text-sm text-blue-800">
             <strong>Debug Permisos:</strong> 
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            Usuario: {(currentUserWithPermissions as any)?.name || 'No encontrado'} | 
+            Usuario: {(userWithPermissions as any)?.name || 'No encontrado'} | 
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            Rol: {(currentUserWithPermissions as any)?.Role?.name || 'Sin rol'} | 
+            Rol: {(userWithPermissions as any)?.role?.name || 'Sin rol'} | 
             Ver: {canView ? '✅' : '❌'} | 
             Editar: {canEdit ? '✅' : '❌'} | 
             Crear: {canCreate ? '✅' : '❌'} | 

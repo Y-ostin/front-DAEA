@@ -15,7 +15,6 @@ import { FinancialReport } from '../../types/financialReport';
 import { useModulePermissions } from '@/core/utils/permission-hooks';
 import { MODULE_NAMES } from '@/core/utils/useModulesMap';
 import { suppressAxios403Errors } from '@/core/utils/error-suppressor';
-import { useCurrentUser } from '@/modules/auth/hook/useCurrentUser';
 import { useAuthStore } from '@/core/store/auth';
 
 import ModalListMonthlyExpenses from './modal-list-monthly-expenses';
@@ -31,8 +30,7 @@ export default function ReporteComponentView() {
     isAdmin
   } = useModulePermissions(MODULE_NAMES.FINANZAS);
 
-  const { data: currentUser } = useCurrentUser();
-  const userWithPermissions = useAuthStore((state) => state.userWithPermissions);
+  const { user, userWithPermissions } = useAuthStore();
 
   // 🔥 ESTADO PARA DETECCIÓN DE ERRORES 403
   const [is403Error, setIs403Error] = useState(false);
@@ -328,10 +326,10 @@ export default function ReporteComponentView() {
   // 🔥 DEBUG PANEL - Información de permisos para desarrollo
   console.log('🔍 Debug Panel Finanzas:', {
     // Información del usuario
-    currentUser: currentUser ? {
-      name: currentUser.name,
-      email: currentUser.email,
-      role: currentUser.Role?.name
+    currentUser: user ? {
+      name: user.name,
+      email: user.email,
+      role: userWithPermissions?.role?.name
     } : null,
     
     // Estado de permisos
